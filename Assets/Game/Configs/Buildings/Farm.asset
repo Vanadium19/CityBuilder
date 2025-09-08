@@ -12,4 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 910fd6f7d1a846aba36e7867053a1108, type: 3}
   m_Name: Farm
   m_EditorClassIdentifier: 
-  _type: 0
+  _type: 1
+  _cost: 25
+  _income: 10

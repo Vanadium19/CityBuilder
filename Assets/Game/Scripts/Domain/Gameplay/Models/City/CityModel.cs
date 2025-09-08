@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Domain.Gameplay.Models.Buildings;
 using Domain.Gameplay.Models.Grid;
+using UnityEngine;
 
 namespace Domain.Gameplay.Models.City
 {
@@ -19,30 +20,27 @@ namespace Domain.Gameplay.Models.City
         public IEnumerable<BuildingModel> Buildings => _buildings.Values;
         public int BuildingsCount => _buildings.Count;
 
-        public void AddBuilding(BuildingModel building, GridPosition position)
+        public bool AddBuilding(BuildingModel building, GridPosition position)
         {
             if (_buildings.Values.Contains(building))
-                return;
+                return false;
 
             if (!_buildings.TryAdd(position, building))
-                return;
+                return false;
 
             building.SetGridPosition(position);
             BuildingAdded?.Invoke(position, building);
+            Debug.Log($"Add building {building.Type} {position.X} {position.Y}");
+            return true;
         }
 
-        public void RemoveBuilding(BuildingModel building)
+        public bool RemoveBuilding(GridPosition position)
         {
-            var position = building.Position;
+            if (!_buildings.Remove(position, out BuildingModel building))
+                return false;
 
-            if (!_buildings.TryGetValue(position, out BuildingModel oldBuilding))
-                return;
-
-            if (oldBuilding != building)
-                return;
-
-            _buildings.Remove(position);
             BuildingRemoved?.Invoke(position, building);
+            return true;
         }
     }
 }

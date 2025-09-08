@@ -99,7 +99,7 @@ namespace Domain.Gameplay.Tests.City
 
             //Act
             _city.AddBuilding(_house, position);
-            _city.RemoveBuilding(_house);
+            _city.RemoveBuilding(position);
 
             //Arrange
             _city.BuildingsCount.Should().Be(0);
@@ -125,7 +125,7 @@ namespace Domain.Gameplay.Tests.City
             };
 
             _city.AddBuilding(_house, position);
-            _city.RemoveBuilding(_house);
+            _city.RemoveBuilding(position);
 
             //Arrange
             buildingPosition.Should().Be(position);
