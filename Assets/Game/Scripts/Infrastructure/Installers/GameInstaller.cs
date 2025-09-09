@@ -61,14 +61,25 @@ namespace Infrastructure.Installers
 
         private void InstallPresenters(IContainerBuilder builder)
         {
-            builder.RegisterEntryPoint<CreateBuildingsPresenter>();
+            builder.RegisterEntryPoint<BuildingsPresenter>();
+            builder.RegisterEntryPoint<UpgradeBuildingsPresenter>();
+            builder.Register<BuildingPresenterFactory>(Lifetime.Singleton);
         }
 
         private void InstallControllers(IContainerBuilder builder)
         {
+            //TODO: Убрать AsSelf и подписать на шину
             builder.RegisterEntryPoint<CreateBuildingController>()
                 .WithParameter(Camera.main)
                 .As<ICreateBuildingController>();
+
+            builder.RegisterEntryPoint<RemoveBuildingController>()
+                .WithParameter(Camera.main)
+                .AsSelf();
+
+            builder.RegisterEntryPoint<UpgradeBuildingController>()
+                .WithParameter(Camera.main)
+                .AsSelf();
         }
 
         private void InstallView(IContainerBuilder builder)

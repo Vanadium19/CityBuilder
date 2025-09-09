@@ -10,16 +10,16 @@ namespace Presentation.Gameplay.Controllers
     public class CreateBuildingController : ITickable, ICreateBuildingController
     {
         private readonly Camera _camera;
-        private readonly IPublisher<CreateBuildingDTO> _subscriber;
+        private readonly IPublisher<CreateBuildingDTO> _publisher;
 
         private BuildingConfig _config;
 
         private bool _isActive;
 
-        public CreateBuildingController(Camera camera, IPublisher<CreateBuildingDTO> subscriber)
+        public CreateBuildingController(Camera camera, IPublisher<CreateBuildingDTO> publisher)
         {
             _camera = camera;
-            _subscriber = subscriber;
+            _publisher = publisher;
         }
 
         public void Tick()
@@ -51,7 +51,7 @@ namespace Presentation.Gameplay.Controllers
             var ray = _camera.ScreenPointToRay(Input.mousePosition);
 
             if (Physics.Raycast(ray, out RaycastHit hit) && hit.collider.TryGetComponent(out CityView view))
-                _subscriber.Publish(new CreateBuildingDTO(_config, hit.point));
+                _publisher.Publish(new CreateBuildingDTO(_config, hit.point));
         }
     }
 }

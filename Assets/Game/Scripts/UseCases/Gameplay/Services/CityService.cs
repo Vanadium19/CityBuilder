@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Domain.Gameplay.Models.Buildings;
 using Domain.Gameplay.Models.City;
 using Domain.Gameplay.Models.Grid;
@@ -12,14 +13,14 @@ namespace UseCases.Gameplay.Services
     {
         private readonly CityModel _cityModel;
 
-        private readonly ObservableDictionary<Vector3, BuildingModel> _buildings = new();
+        private readonly ObservableDictionary<Vector3, BuildingService> _buildings = new();
 
         public CityService(CityModel cityModel)
         {
             _cityModel = cityModel;
         }
 
-        public IReadOnlyObservableDictionary<Vector3, BuildingModel> Buildings => _buildings;
+        public IReadOnlyObservableDictionary<Vector3, BuildingService> Buildings => _buildings;
 
         public void Initialize()
         {
@@ -37,20 +38,23 @@ namespace UseCases.Gameplay.Services
         {
             var worldPosition = GridPositionToWorldPosition(position);
 
-            _buildings.Add(worldPosition, building);
+            var service = new BuildingService(building);
+            _buildings.Add(worldPosition, service);
+            service.Initialize();
         }
 
         private void OnBuildingRemoved(GridPosition position, BuildingModel building)
         {
             var worldPosition = GridPositionToWorldPosition(position);
 
-            _buildings.Remove(worldPosition);
+            if (_buildings.Remove(worldPosition, out BuildingService service))
+                service.Dispose();
         }
 
         //TODO: Вынести в Utils
         private Vector3 GridPositionToWorldPosition(GridPosition position)
         {
-            var cellSize = CityModel.CellSize; 
+            var cellSize = CityModel.CellSize;
             var factor = cellSize / 2f;
 
             var x = position.X * cellSize + factor;
