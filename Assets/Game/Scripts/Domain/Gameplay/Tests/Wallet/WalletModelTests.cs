@@ -11,7 +11,7 @@ namespace Domain.Gameplay.Tests.Wallet
         [SetUp]
         public void SetUp()
         {
-            _wallet = new WalletModel();
+            _wallet = new WalletModel(0);
         }
 
         [TestCase(1)]

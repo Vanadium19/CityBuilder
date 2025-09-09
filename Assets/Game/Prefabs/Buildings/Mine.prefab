@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 1102892371921231116}
   - component: {fileID: 6837377979120405115}
   m_Layer: 0
-  m_Name: House
+  m_Name: Mine
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -66,7 +66,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 193aa1ec4532e4379950a78e65d43fdb, type: 2}
+  - {fileID: 2100000, guid: d72ae4ec646bd4bb59668086c518b853, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -121,4 +121,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c89999d9ae374bd986f678ea0a0ecf06, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _type: 0
+  _type: 2

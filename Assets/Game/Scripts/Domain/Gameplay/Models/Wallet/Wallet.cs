@@ -7,6 +7,11 @@ namespace Domain.Gameplay.Models.Wallet
     {
         private int _money;
 
+        public WalletModel(int money)
+        {
+            _money = money;
+        }
+
         public event Action<int> MoneyChanged;
 
         public int CurrentMoney => _money;
@@ -18,7 +23,6 @@ namespace Domain.Gameplay.Models.Wallet
 
             _money += amount;
             MoneyChanged?.Invoke(_money);
-            Debug.Log($"Money added! current money: {_money}");
         }
 
         public void RemoveMoney(int amount)
@@ -29,7 +33,6 @@ namespace Domain.Gameplay.Models.Wallet
             if (_money < amount)
                 return;
 
-            Debug.Log($"Money removed! current money: {_money}");
             _money -= amount;
             MoneyChanged?.Invoke(_money);
         }

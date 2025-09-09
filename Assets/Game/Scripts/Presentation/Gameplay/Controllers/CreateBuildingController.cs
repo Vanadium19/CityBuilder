@@ -1,3 +1,4 @@
+using System;
 using Domain.Gameplay.MessagesDTO;
 using Domain.Gameplay.Models.Buildings;
 using MessagePipe;
@@ -7,19 +8,39 @@ using VContainer.Unity;
 
 namespace Presentation.Gameplay.Controllers
 {
-    public class CreateBuildingController : ITickable, ICreateBuildingController
+    public class CreateBuildingController : IInitializable, ITickable, IDisposable
     {
         private readonly Camera _camera;
         private readonly IPublisher<CreateBuildingDTO> _publisher;
 
-        private BuildingConfig _config;
+        private readonly ISubscriber<SetActiveCreateBuildingControllerDTO> _setActiveSubscriber;
+        private readonly ISubscriber<SetConfigInBuilderControllerDTO> _setConfigSubscriber;
 
+        private IDisposable _disposable;
+
+        private BuildingConfig _config;
         private bool _isActive;
 
-        public CreateBuildingController(Camera camera, IPublisher<CreateBuildingDTO> publisher)
+        public CreateBuildingController(Camera camera,
+            IPublisher<CreateBuildingDTO> publisher,
+            ISubscriber<SetConfigInBuilderControllerDTO> setConfigSubscriber,
+            ISubscriber<SetActiveCreateBuildingControllerDTO> setActiveSubscriber)
         {
             _camera = camera;
             _publisher = publisher;
+
+            _setActiveSubscriber = setActiveSubscriber;
+            _setConfigSubscriber = setConfigSubscriber;
+        }
+
+        public void Initialize()
+        {
+            var bag = DisposableBag.CreateBuilder();
+
+            _setActiveSubscriber.Subscribe(SetActive).AddTo(bag);
+            _setConfigSubscriber.Subscribe(SetBuilding).AddTo(bag);
+
+            _disposable = bag.Build();
         }
 
         public void Tick()
@@ -36,14 +57,19 @@ namespace Presentation.Gameplay.Controllers
             CreateBuilding();
         }
 
-        public void SetBuilding(BuildingConfig config)
+        public void Dispose()
         {
-            _config = config;
+            _disposable.Dispose();
         }
 
-        public void SetActive(bool value)
+        private void SetBuilding(SetConfigInBuilderControllerDTO dto)
         {
-            _isActive = value;
+            _config = dto.Config;
+        }
+
+        private void SetActive(SetActiveCreateBuildingControllerDTO dto)
+        {
+            _isActive = dto.IsActive;
         }
 
         private void CreateBuilding()

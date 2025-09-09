@@ -1,3 +1,4 @@
+using System;
 using Domain.Gameplay.MessagesDTO;
 using MessagePipe;
 using Presentation.Presentation.View;
@@ -6,17 +7,32 @@ using VContainer.Unity;
 
 namespace Presentation.Gameplay.Controllers
 {
-    public class UpgradeBuildingController : ITickable
+    public class UpgradeBuildingController : IInitializable, ITickable, IDisposable
     {
         private readonly Camera _camera;
         private readonly IPublisher<UpgradeBuildingDTO> _publisher;
+        private readonly ISubscriber<SetActiveUpgradeBuildingControllerDTO> _subscriber;
+
+        private IDisposable _disposable;
 
         private bool _isActive;
 
-        public UpgradeBuildingController(Camera camera, IPublisher<UpgradeBuildingDTO> publisher)
+        public UpgradeBuildingController(Camera camera,
+            IPublisher<UpgradeBuildingDTO> publisher,
+            ISubscriber<SetActiveUpgradeBuildingControllerDTO> subscriber)
         {
             _camera = camera;
             _publisher = publisher;
+            _subscriber = subscriber;
+        }
+
+        public void Initialize()
+        {
+            var bag = DisposableBag.CreateBuilder();
+
+            _subscriber.Subscribe(SetActive).AddTo(bag);
+
+            _disposable = bag.Build();
         }
 
         public void Tick()
@@ -30,9 +46,14 @@ namespace Presentation.Gameplay.Controllers
             RemoveBuilding();
         }
 
-        public void SetActive(bool value)
+        public void Dispose()
         {
-            _isActive = value;
+            _disposable.Dispose();
+        }
+
+        public void SetActive(SetActiveUpgradeBuildingControllerDTO dto)
+        {
+            _isActive = dto.IsActive;
         }
 
         private void RemoveBuilding()

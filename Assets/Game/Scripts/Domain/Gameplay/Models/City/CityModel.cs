@@ -9,7 +9,7 @@ namespace Domain.Gameplay.Models.City
 {
     public class CityModel
     {
-        public const int CellSize = 2;
+        public const int CellSize = 3;
 
         private readonly Dictionary<GridPosition, BuildingModel> _buildings = new();
 

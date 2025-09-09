@@ -21,7 +21,11 @@ namespace Presentation.Presentation.View
 
         public void UpdateLevel(int value)
         {
-            transform.localScale = _startScale * value;
+            var scale = _startScale;
+            _startScale.x *= value;
+            _startScale.z *= value;
+
+            transform.localScale = scale;
         }
     }
 }

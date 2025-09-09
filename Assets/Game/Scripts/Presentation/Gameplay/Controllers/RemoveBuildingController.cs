@@ -8,28 +8,33 @@ using VContainer.Unity;
 
 namespace Presentation.Gameplay.Controllers
 {
-    public class RemoveBuildingController : ITickable //IInitializable, IDisposable
+    public class RemoveBuildingController : IInitializable, ITickable, IDisposable
     {
         private readonly Camera _camera;
         private readonly IPublisher<RemoveBuildingDTO> _publisher;
+        private readonly ISubscriber<SetActiveRemoveBuildingControllerDTO> _subscriber;
+
+        private IDisposable _disposable;
 
         private bool _isActive;
 
-        public RemoveBuildingController(Camera camera, IPublisher<RemoveBuildingDTO> publisher)
+        public RemoveBuildingController(Camera camera,
+            IPublisher<RemoveBuildingDTO> publisher,
+            ISubscriber<SetActiveRemoveBuildingControllerDTO> subscriber)
         {
             _camera = camera;
             _publisher = publisher;
+            _subscriber = subscriber;
         }
 
-        // public void Initialize()
-        // {
-        //     throw new NotImplementedException();
-        // }
-        //
-        // public void Dispose()
-        // {
-        //     throw new NotImplementedException();
-        // }
+        public void Initialize()
+        {
+            var bag = DisposableBag.CreateBuilder();
+
+            _subscriber.Subscribe(SetActive).AddTo(bag);
+
+            _disposable = bag.Build();
+        }
 
         public void Tick()
         {
@@ -42,9 +47,14 @@ namespace Presentation.Gameplay.Controllers
             RemoveBuilding();
         }
 
-        public void SetActive(bool value)
+        public void Dispose()
         {
-            _isActive = value;
+            _disposable.Dispose();
+        }
+
+        public void SetActive(SetActiveRemoveBuildingControllerDTO dto)
+        {
+            _isActive = dto.IsActive;
         }
 
         private void RemoveBuilding()

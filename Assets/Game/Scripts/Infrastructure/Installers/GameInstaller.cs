@@ -18,6 +18,7 @@ namespace Infrastructure.Installers
     {
         [SerializeField] private BuildingView[] _buildingViews;
         [SerializeField] private Transform _buildingsContainer;
+        [SerializeField] private MoneyView _moneyView;
 
         protected override void Configure(IContainerBuilder builder)
         {
@@ -36,7 +37,8 @@ namespace Infrastructure.Installers
 
         private void InstallWallet(IContainerBuilder builder)
         {
-            builder.Register<WalletModel>(Lifetime.Singleton);
+            builder.Register<WalletModel>(Lifetime.Singleton)
+                .WithParameter(100);
         }
 
         private void InstallCity(IContainerBuilder builder)
@@ -63,6 +65,7 @@ namespace Infrastructure.Installers
         {
             builder.RegisterEntryPoint<BuildingsPresenter>();
             builder.RegisterEntryPoint<UpgradeBuildingsPresenter>();
+            builder.RegisterEntryPoint<MoneyPresenter>();
             builder.Register<BuildingPresenterFactory>(Lifetime.Singleton);
         }
 
@@ -70,22 +73,20 @@ namespace Infrastructure.Installers
         {
             //TODO: Убрать AsSelf и подписать на шину
             builder.RegisterEntryPoint<CreateBuildingController>()
-                .WithParameter(Camera.main)
-                .As<ICreateBuildingController>();
+                .WithParameter(Camera.main);
 
             builder.RegisterEntryPoint<RemoveBuildingController>()
-                .WithParameter(Camera.main)
-                .AsSelf();
+                .WithParameter(Camera.main);
 
             builder.RegisterEntryPoint<UpgradeBuildingController>()
-                .WithParameter(Camera.main)
-                .AsSelf();
+                .WithParameter(Camera.main);
         }
 
         private void InstallView(IContainerBuilder builder)
         {
             builder.RegisterInstance(_buildingViews);
             builder.Register<BuildingViewFactory>(Lifetime.Singleton).WithParameter(_buildingsContainer);
+            builder.RegisterInstance(_moneyView);
         }
     }
 }
