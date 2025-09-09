@@ -2,14 +2,14 @@ using System;
 using System.Collections.Generic;
 using Domain.Gameplay.Models.Buildings;
 using Domain.Gameplay.Models.City;
-using Domain.Gameplay.Models.Grid;
 using ObservableCollections;
 using UnityEngine;
+using Utils.Extenshions;
 using VContainer.Unity;
 
 namespace UseCases.Gameplay.Services
 {
-    public class CityService : IInitializable, IDisposable
+    public class CityService : IInitializable, IDisposable, ICityService
     {
         private readonly CityModel _cityModel;
 
@@ -34,33 +34,21 @@ namespace UseCases.Gameplay.Services
             _cityModel.BuildingRemoved -= OnBuildingRemoved;
         }
 
-        private void OnBuildingAdded(GridPosition position, BuildingModel building)
+        private void OnBuildingAdded(CityPosition position, BuildingModel building)
         {
-            var worldPosition = GridPositionToWorldPosition(position);
+            var worldPosition = _cityModel.CityPositionToWorldPosition(position);
 
             var service = new BuildingService(building);
             _buildings.Add(worldPosition, service);
             service.Initialize();
         }
 
-        private void OnBuildingRemoved(GridPosition position, BuildingModel building)
+        private void OnBuildingRemoved(CityPosition position, BuildingModel building)
         {
-            var worldPosition = GridPositionToWorldPosition(position);
+            var worldPosition = _cityModel.CityPositionToWorldPosition(position);
 
             if (_buildings.Remove(worldPosition, out BuildingService service))
                 service.Dispose();
-        }
-
-        //TODO: Вынести в Utils
-        private Vector3 GridPositionToWorldPosition(GridPosition position)
-        {
-            var cellSize = CityModel.CellSize;
-            var factor = cellSize / 2f;
-
-            var x = position.X * cellSize + factor;
-            var z = position.Y * cellSize + factor;
-
-            return new Vector3(x, 0, z);
         }
     }
 }

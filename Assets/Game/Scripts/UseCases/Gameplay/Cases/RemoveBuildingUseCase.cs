@@ -1,7 +1,6 @@
 using Domain.Gameplay.MessagesDTO;
 using Domain.Gameplay.Models.City;
-using Domain.Gameplay.Models.Grid;
-using UnityEngine;
+using Utils.Extenshions;
 
 namespace UseCases.Gameplay.Cases
 {
@@ -16,20 +15,9 @@ namespace UseCases.Gameplay.Cases
 
         public void Handle(RemoveBuildingDTO dto)
         {
-            var position = WorldPositionToGridPosition(dto.Position);
+            var position = _city.WorldPositionToCityPosition(dto.Position);
 
             _city.RemoveBuilding(position);
-        }
-
-        //TODO: Вынести в utils
-        private GridPosition WorldPositionToGridPosition(Vector3 position)
-        {
-            var cellSize = CityModel.CellSize;
-
-            var x = Mathf.FloorToInt(position.x / cellSize);
-            var y = Mathf.FloorToInt(position.z / cellSize);
-
-            return new GridPosition(x, y);
         }
     }
 }

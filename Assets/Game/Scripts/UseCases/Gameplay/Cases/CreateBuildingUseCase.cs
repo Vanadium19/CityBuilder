@@ -1,9 +1,8 @@
 using Domain.Gameplay.MessagesDTO;
 using Domain.Gameplay.Models.Buildings;
 using Domain.Gameplay.Models.City;
-using Domain.Gameplay.Models.Grid;
 using Domain.Gameplay.Models.Wallet;
-using UnityEngine;
+using Utils.Extenshions;
 
 namespace UseCases.Gameplay.Cases
 {
@@ -27,22 +26,11 @@ namespace UseCases.Gameplay.Cases
             if (cost > _wallet.CurrentMoney)
                 return;
 
-            var position = WorldPositionToGridPosition(dto.Position);
+            var position = _city.WorldPositionToCityPosition(dto.Position);
             var building = _factory.Create(dto.Config);
 
             if (_city.AddBuilding(building, position))
                 _wallet.RemoveMoney(cost);
-        }
-
-        //TODO: Вынести в utils
-        private GridPosition WorldPositionToGridPosition(Vector3 position)
-        {
-            var cellSize = CityModel.CellSize;
-
-            var x = Mathf.FloorToInt(position.x / cellSize);
-            var y = Mathf.FloorToInt(position.z / cellSize);
-
-            return new GridPosition(x, y);
         }
     }
 }

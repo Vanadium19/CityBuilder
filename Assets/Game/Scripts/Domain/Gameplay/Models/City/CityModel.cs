@@ -2,8 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Domain.Gameplay.Models.Buildings;
-using Domain.Gameplay.Models.Grid;
-using UnityEngine;
 
 namespace Domain.Gameplay.Models.City
 {
@@ -11,16 +9,16 @@ namespace Domain.Gameplay.Models.City
     {
         public const int CellSize = 3;
 
-        private readonly Dictionary<GridPosition, BuildingModel> _buildings = new();
+        private readonly Dictionary<CityPosition, BuildingModel> _buildings = new();
 
-        public event Action<GridPosition, BuildingModel> BuildingAdded;
-        public event Action<GridPosition, BuildingModel> BuildingRemoved;
+        public event Action<CityPosition, BuildingModel> BuildingAdded;
+        public event Action<CityPosition, BuildingModel> BuildingRemoved;
 
-        public IReadOnlyDictionary<GridPosition, BuildingModel> BuildingsToPositions => _buildings;
+        public IReadOnlyDictionary<CityPosition, BuildingModel> BuildingsToPositions => _buildings;
         public IEnumerable<BuildingModel> Buildings => _buildings.Values;
         public int BuildingsCount => _buildings.Count;
 
-        public bool AddBuilding(BuildingModel building, GridPosition position)
+        public bool AddBuilding(BuildingModel building, CityPosition position)
         {
             if (_buildings.Values.Contains(building))
                 return false;
@@ -28,12 +26,12 @@ namespace Domain.Gameplay.Models.City
             if (!_buildings.TryAdd(position, building))
                 return false;
 
-            building.SetGridPosition(position);
+            building.SetCityPosition(position);
             BuildingAdded?.Invoke(position, building);
             return true;
         }
 
-        public bool RemoveBuilding(GridPosition position)
+        public bool RemoveBuilding(CityPosition position)
         {
             if (!_buildings.Remove(position, out BuildingModel building))
                 return false;

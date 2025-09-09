@@ -1,6 +1,6 @@
 using System;
 using Domain.Gameplay.Models.Buildings;
-using Domain.Gameplay.Models.Grid;
+using Domain.Gameplay.Models.City;
 using FluentAssertions;
 using NUnit.Framework;
 using UnityEditor;
@@ -46,10 +46,10 @@ namespace Domain.Gameplay.Tests.Buildings
         {
             //Arrange
             var building = new BuildingModel(_config);
-            var position = new GridPosition(0, 1);
+            var position = new CityPosition(0, 1);
 
             //Act
-            building.SetGridPosition(position);
+            building.SetCityPosition(position);
 
             //Arrange
             building.Position.Should().Be(position);

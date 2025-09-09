@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using Domain.Gameplay.Models.Buildings;
 using Domain.Gameplay.Models.City;
-using Domain.Gameplay.Models.Grid;
 using FluentAssertions;
 using NUnit.Framework;
 using UnityEditor;
@@ -35,8 +34,8 @@ namespace Domain.Gameplay.Tests.City
         public void WhenAddBuildings_TheyAdded()
         {
             //Arrange
-            var housePosition = new GridPosition(1, 1);
-            var farmPosition = new GridPosition(2, 2);
+            var housePosition = new CityPosition(1, 1);
+            var farmPosition = new CityPosition(2, 2);
 
             //Act
             _city.AddBuilding(_house, housePosition);
@@ -46,19 +45,19 @@ namespace Domain.Gameplay.Tests.City
             _city.Buildings.Should().Contain(_house);
             _city.Buildings.Should().Contain(_farm);
             _city.BuildingsCount.Should().Be(2);
-            _city.BuildingsToPositions.Should().Contain(new KeyValuePair<GridPosition, BuildingModel>(housePosition, _house));
-            _city.BuildingsToPositions.Should().Contain(new KeyValuePair<GridPosition, BuildingModel>(farmPosition, _farm));
+            _city.BuildingsToPositions.Should().Contain(new KeyValuePair<CityPosition, BuildingModel>(housePosition, _house));
+            _city.BuildingsToPositions.Should().Contain(new KeyValuePair<CityPosition, BuildingModel>(farmPosition, _farm));
         }
 
         [Test]
         public void WhenAddBuilding_PositionInBuildingAreChange()
         {
             //Arrange
-            var oldPosition = new GridPosition(2, 2);
-            var newPosition = new GridPosition(1, 1);
+            var oldPosition = new CityPosition(2, 2);
+            var newPosition = new CityPosition(1, 1);
 
             //Act
-            _house.SetGridPosition(oldPosition);
+            _house.SetCityPosition(oldPosition);
             _city.AddBuilding(_house, newPosition);
 
             //Assert
@@ -70,10 +69,10 @@ namespace Domain.Gameplay.Tests.City
         {
             //Arrange
             var invoked = false;
-            var position = new GridPosition(2, 2);
+            var position = new CityPosition(2, 2);
 
             BuildingModel building = null;
-            GridPosition buildingPosition = default;
+            CityPosition buildingPosition = default;
 
             //Act
             _city.BuildingAdded += (pos, build) =>
@@ -95,7 +94,7 @@ namespace Domain.Gameplay.Tests.City
         public void WhenRemoveBuilding_ItRemoved()
         {
             //Arrange
-            var position = new GridPosition(2, 2);
+            var position = new CityPosition(2, 2);
 
             //Act
             _city.AddBuilding(_house, position);
@@ -111,10 +110,10 @@ namespace Domain.Gameplay.Tests.City
         {
             //Arrange
             var invoked = false;
-            var position = new GridPosition(2, 2);
+            var position = new CityPosition(2, 2);
 
             BuildingModel building = null;
-            GridPosition buildingPosition = default;
+            CityPosition buildingPosition = default;
 
             //Act
             _city.BuildingRemoved += (pos, build) =>
@@ -137,8 +136,8 @@ namespace Domain.Gameplay.Tests.City
         public void WhenTryAddSameBuilding_ItShouldNotBeAdded()
         {
             //Arrange
-            var position1 = new GridPosition(1, 1);
-            var position2 = new GridPosition(2, 2);
+            var position1 = new CityPosition(1, 1);
+            var position2 = new CityPosition(2, 2);
 
             //Act
             _city.AddBuilding(_house, position1);
@@ -155,7 +154,7 @@ namespace Domain.Gameplay.Tests.City
         public void WhenTryAddBuildingsToBusyPosition_ItIsNotAdded()
         {
             //Arrange
-            var position = new GridPosition(1, 1);
+            var position = new CityPosition(1, 1);
 
             //Act
             _city.AddBuilding(_house, position);

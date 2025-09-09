@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using Domain.Gameplay.Models.Buildings;
 using Domain.Gameplay.Models.City;
-using Domain.Gameplay.Models.Grid;
 using Domain.Gameplay.Models.Wallet;
 using R3;
 using VContainer.Unity;
@@ -33,7 +32,7 @@ namespace UseCases.Gameplay.Services
             _incomeStreamDisposable = _incomeStream.Subscribe(_wallet.AddMoney);
         }
 
-        private void OnBuildingAdded(GridPosition position, BuildingModel building)
+        private void OnBuildingAdded(CityPosition position, BuildingModel building)
         {
             var disposable = Observable.Interval(TimeSpan.FromSeconds(building.IncomeDelay))
                 .Select(_ => building.Income)
@@ -42,7 +41,7 @@ namespace UseCases.Gameplay.Services
             _disposables[building] = disposable;
         }
 
-        private void OnBuildingRemoved(GridPosition position, BuildingModel building)
+        private void OnBuildingRemoved(CityPosition position, BuildingModel building)
         {
             if (_disposables.Remove(building, out IDisposable disposable))
                 disposable.Dispose();

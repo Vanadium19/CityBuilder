@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using Domain.Gameplay.MessagesDTO;
-using Domain.Gameplay.Models.Buildings;
 using MessagePipe;
 using UnityEngine;
 using UnityEngine.UIElements;

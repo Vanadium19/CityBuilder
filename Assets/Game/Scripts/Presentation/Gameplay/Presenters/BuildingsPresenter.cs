@@ -14,43 +14,27 @@ using Object = UnityEngine.Object;
 
 namespace Presentation.Gameplay.Presenters
 {
-    //TODO: Поделить на два презентера
-    public class BuildingsPresenter : IStartable, IDisposable
+    public class CityPresenter : IStartable, IDisposable
     {
-        private readonly CityService _cityService;
+        private readonly ICityService _cityService;
 
         private readonly BuildingViewFactory _viewFactory;
         private readonly BuildingPresenterFactory _presenterFactory;
-
-        private readonly CreateBuildingUseCase _createBuildingUseCase;
-        private readonly RemoveBuildingUseCase _removeBuildingUseCase;
-
-        private readonly ISubscriber<CreateBuildingDTO> _createBuildingSubscriber;
-        private readonly ISubscriber<RemoveBuildingDTO> _removeBuildingSubscriber;
 
         private readonly Dictionary<BuildingService, BuildingView> _servicesToView = new();
         private readonly Dictionary<BuildingService, BuildingPresenter> _servicesToPresenters = new();
 
         private IDisposable _disposable;
 
-        public BuildingsPresenter(CityService cityService,
-            CreateBuildingUseCase createBuildingUseCase,
+        public CityPresenter(ICityService cityService,
             RemoveBuildingUseCase removeBuildingUseCase,
             BuildingViewFactory viewFactory,
             BuildingPresenterFactory presenterFactory,
-            ISubscriber<CreateBuildingDTO> createBuildingSubscriber,
             ISubscriber<RemoveBuildingDTO> removeBuildingSubscriber)
         {
             _cityService = cityService;
-
             _viewFactory = viewFactory;
             _presenterFactory = presenterFactory;
-
-            _createBuildingUseCase = createBuildingUseCase;
-            _removeBuildingUseCase = removeBuildingUseCase;
-
-            _createBuildingSubscriber = createBuildingSubscriber;
-            _removeBuildingSubscriber = removeBuildingSubscriber;
         }
 
         public void Start()
@@ -59,8 +43,6 @@ namespace Presentation.Gameplay.Presenters
 
             _cityService.Buildings.ObserveAdd().Subscribe(OnBuildingAdded).AddTo(ref builder);
             _cityService.Buildings.ObserveRemove().Subscribe(OnBuildingRemoved).AddTo(ref builder);
-            _createBuildingSubscriber.Subscribe(_createBuildingUseCase.Handle).AddTo(ref builder);
-            _removeBuildingSubscriber.Subscribe(_removeBuildingUseCase.Handle).AddTo(ref builder);
 
             _disposable = builder.Build();
         }
@@ -81,6 +63,7 @@ namespace Presentation.Gameplay.Presenters
             _servicesToPresenters.Add(building, presenter);
         }
 
+        //TODO: Merge view/presenter and create pool system
         private void OnBuildingRemoved(CollectionRemoveEvent<KeyValuePair<Vector3, BuildingService>> removeEvent)
         {
             var building = removeEvent.Value.Value;

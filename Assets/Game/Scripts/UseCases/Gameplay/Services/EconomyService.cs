@@ -5,7 +5,7 @@ using VContainer.Unity;
 
 namespace UseCases.Gameplay.Services
 {
-    public class EconomyService : IInitializable, IDisposable
+    public class EconomyService : IInitializable, IDisposable, IEconomyService
     {
         private readonly WalletModel _wallet;
         private readonly ReactiveProperty<int> _money;

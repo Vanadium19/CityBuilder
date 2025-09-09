@@ -1,6 +1,5 @@
 using System;
-using Domain.Gameplay.Models.Grid;
-using UnityEngine;
+using Domain.Gameplay.Models.City;
 
 namespace Domain.Gameplay.Models.Buildings
 {
@@ -11,7 +10,7 @@ namespace Domain.Gameplay.Models.Buildings
 
         private readonly BuildingConfig _config;
 
-        private GridPosition _gridPositon;
+        private CityPosition _cityPositon;
         private int _level;
 
         public event Action<int> LevelUpgraded;
@@ -33,7 +32,7 @@ namespace Domain.Gameplay.Models.Buildings
         }
 
         public BuildingType Type => _config.Type;
-        public GridPosition Position => _gridPositon;
+        public CityPosition Position => _cityPositon;
 
         public void Upgrade()
         {
@@ -44,9 +43,9 @@ namespace Domain.Gameplay.Models.Buildings
             LevelUpgraded?.Invoke(_level);
         }
 
-        internal void SetGridPosition(GridPosition value)
+        internal void SetCityPosition(CityPosition value)
         {
-            _gridPositon = value;
+            _cityPositon = value;
         }
     }
 }

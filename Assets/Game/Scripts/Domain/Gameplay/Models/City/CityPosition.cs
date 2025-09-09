@@ -1,11 +1,11 @@
 using System;
 
-namespace Domain.Gameplay.Models.Grid
+namespace Domain.Gameplay.Models.City
 {
     [Serializable]
-    public struct GridPosition
+    public struct CityPosition
     {
-        public GridPosition(int x, int y)
+        public CityPosition(int x, int y)
         {
             X = x;
             Y = y;

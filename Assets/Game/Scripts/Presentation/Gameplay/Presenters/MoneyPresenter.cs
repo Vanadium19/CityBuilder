@@ -1,6 +1,7 @@
 using System;
 using Presentation.Gameplay.View;
 using R3;
+using UnityEngine;
 using UseCases.Gameplay.Services;
 using VContainer.Unity;
 
@@ -8,12 +9,12 @@ namespace Presentation.Gameplay.Presenters
 {
     public class MoneyPresenter : IStartable, IDisposable
     {
-        private readonly EconomyService _service;
+        private readonly IEconomyService _service;
         private readonly MoneyView _view;
 
         private IDisposable _disposable;
 
-        public MoneyPresenter(EconomyService service, MoneyView view)
+        public MoneyPresenter(IEconomyService service, MoneyView view)
         {
             _service = service;
             _view = view;
