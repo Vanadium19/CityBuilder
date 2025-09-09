@@ -1,0 +1,17 @@
+using System;
+
+namespace Domain.Gameplay.Models.Grid
+{
+    [Serializable]
+    public struct GridPosition
+    {
+        public GridPosition(int x, int y)
+        {
+            X = x;
+            Y = y;
+        }
+
+        public int X { get; }
+        public int Y { get; }
+    }
+}
