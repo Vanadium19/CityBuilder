@@ -30,10 +30,10 @@
 
 ```
 Assets/
- ├─ Domain/                // Чистые модели (Building, Economy, GridPosition)
- ├─ Application/           // Use Cases (Place, Move, Remove, Upgrade), сервисы экономики
- ├─ Presentation/          // UI Toolkit (HudView, BuildingView, Presenters)
- └─ Infrastructure/        // Save/Load, Input Adapter, фабрики, DI (VContainer)
+ ├─ Domain/                // Чистые модели + DTO
+ ├─ Application/           // Use Cases, Services
+ ├─ Presentation/          // UI Toolkit, View, Presenters, Controllers
+ └─ Infrastructure/        // Save/Load, DI
 ```
 
 - **Domain** – бизнес-модели без Unity API  
@@ -44,13 +44,13 @@ Assets/
 ---
 
 ## ✅ Реализовано
-- Базовый UI Toolkit: панель ресурсов, кнопки для постройки зданий  
+- Базовый UI Toolkit: панель денег, кнопки для постройки зданий  
 - 3 типа зданий (Дом, Ферма, Шахта)  
-- UseCases: установка, перемещение, удаление, апгрейд зданий  
-- Экономика: начисление Gold от зданий каждые N секунд  
+- UseCases: установка, удаление, апгрейд зданий  
+- Экономика: начисление денег от зданий каждые N секунд  
 - DI через VContainer  
 - События через MessagePipe  
-- Тесты для Domain (стоимость, апгрейд, проверка занятости клетки)  
+- Тесты для Domain (City, Wallet, Builging)
 
 ---
 
