@@ -2,11 +2,13 @@ using Domain.Gameplay.Models.Buildings;
 using Domain.Gameplay.Models.City;
 using Domain.Gameplay.Models.Wallet;
 using MessagePipe;
+using Presentation.Gameplay.Controllers;
 using Presentation.Gameplay.Presenters;
 using Presentation.Gameplay.View;
 using Presentation.Presentation.View;
 using UnityEngine;
-using UseCases.Gameplay;
+using UseCases.Gameplay.Cases;
+using UseCases.Gameplay.Services;
 using VContainer;
 using VContainer.Unity;
 
@@ -27,7 +29,8 @@ namespace Infrastructure.Installers
             InstallUseCases(builder);
             InstallServices(builder);
 
-            InstallPresenter(builder);
+            InstallPresenters(builder);
+            InstallControllers(builder);
             InstallView(builder);
         }
 
@@ -53,11 +56,19 @@ namespace Infrastructure.Installers
         {
             builder.RegisterEntryPoint<EconomyService>().AsSelf();
             builder.RegisterEntryPoint<CityService>().AsSelf();
+            builder.RegisterEntryPoint<IncomeService>().AsSelf();
         }
 
-        private void InstallPresenter(IContainerBuilder builder)
+        private void InstallPresenters(IContainerBuilder builder)
         {
             builder.RegisterEntryPoint<CreateBuildingsPresenter>();
+        }
+
+        private void InstallControllers(IContainerBuilder builder)
+        {
+            builder.RegisterEntryPoint<CreateBuildingController>()
+                .WithParameter(Camera.main)
+                .As<ICreateBuildingController>();
         }
 
         private void InstallView(IContainerBuilder builder)

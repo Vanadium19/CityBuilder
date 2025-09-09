@@ -21,6 +21,7 @@ namespace Domain.Gameplay.Models.Buildings
 
         public int Cost => _config.Cost * _level;
         public int Income => _config.Income * _level;
+        public float IncomeDelay => _config.IncomeDelay;
 
         public BuildingModel(BuildingConfig config)
         {

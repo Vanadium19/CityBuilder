@@ -3,7 +3,7 @@ using Domain.Gameplay.Models.Wallet;
 using R3;
 using VContainer.Unity;
 
-namespace UseCases.Gameplay
+namespace UseCases.Gameplay.Services
 {
     public class EconomyService : IInitializable, IDisposable
     {

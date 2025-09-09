@@ -3,7 +3,7 @@ using Domain.Gameplay.Models.City;
 using Domain.Gameplay.Models.Grid;
 using UnityEngine;
 
-namespace UseCases.Gameplay
+namespace UseCases.Gameplay.Cases
 {
     public class RemoveBuildingUseCase
     {

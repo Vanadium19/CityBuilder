@@ -5,33 +5,36 @@ using Domain.Gameplay.Models.Grid;
 using Domain.Gameplay.Models.Wallet;
 using UnityEngine;
 
-namespace UseCases.Gameplay
+namespace UseCases.Gameplay.Cases
 {
-    public class CreateBuildingUseCase
+    public class UpgradeBuildingUseCase
     {
         private readonly CityModel _city;
         private readonly WalletModel _wallet;
-        private readonly BuildingModelFactory _factory;
 
-        public CreateBuildingUseCase(CityModel city, WalletModel wallet, BuildingModelFactory factory)
+        public UpgradeBuildingUseCase(CityModel city, WalletModel wallet)
         {
             _city = city;
             _wallet = wallet;
-            _factory = factory;
         }
 
-        public void Handle(CreateBuildingDTO dto)
+        public void Handle(UpgradeBuildingDTO dto)
         {
-            var cost = dto.Config.Cost;
+            var position = WorldPositionToGridPosition(dto.Position);
+
+            if (!_city.BuildingsToPositions.TryGetValue(position, out BuildingModel buildings))
+                return;
+
+            if (!buildings.CanUpgrade)
+                return;
+
+            var cost = buildings.Cost;
 
             if (cost > _wallet.CurrentMoney)
                 return;
 
-            var position = WorldPositionToGridPosition(dto.Position);
-            var building = _factory.Create(dto.Config);
-
-            if (_city.AddBuilding(building, position))
-                _wallet.RemoveMoney(cost);
+            buildings.Upgrade();
+            _wallet.RemoveMoney(cost);
         }
 
         //TODO: Вынести в utils

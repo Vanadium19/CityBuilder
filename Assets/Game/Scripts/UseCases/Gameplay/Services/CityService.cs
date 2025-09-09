@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using Domain.Gameplay.Models.Buildings;
 using Domain.Gameplay.Models.City;
 using Domain.Gameplay.Models.Grid;
@@ -7,7 +6,7 @@ using ObservableCollections;
 using UnityEngine;
 using VContainer.Unity;
 
-namespace UseCases.Gameplay
+namespace UseCases.Gameplay.Services
 {
     public class CityService : IInitializable, IDisposable
     {
@@ -51,10 +50,11 @@ namespace UseCases.Gameplay
         //TODO: Вынести в Utils
         private Vector3 GridPositionToWorldPosition(GridPosition position)
         {
-            var factor = CityModel.CellSize / 2f;
+            var cellSize = CityModel.CellSize; 
+            var factor = cellSize / 2f;
 
-            var x = position.X * factor;
-            var z = position.Y * factor;
+            var x = position.X * cellSize + factor;
+            var z = position.Y * cellSize + factor;
 
             return new Vector3(x, 0, z);
         }

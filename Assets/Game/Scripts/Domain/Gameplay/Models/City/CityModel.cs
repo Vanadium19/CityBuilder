@@ -9,7 +9,7 @@ namespace Domain.Gameplay.Models.City
 {
     public class CityModel
     {
-        public const int CellSize = 5;
+        public const int CellSize = 2;
 
         private readonly Dictionary<GridPosition, BuildingModel> _buildings = new();
 
@@ -30,7 +30,6 @@ namespace Domain.Gameplay.Models.City
 
             building.SetGridPosition(position);
             BuildingAdded?.Invoke(position, building);
-            Debug.Log($"Add building {building.Type} {position.X} {position.Y}");
             return true;
         }
 
